@@ -3,11 +3,9 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import postgres from "postgres";
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
+import { sql } from './db';
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string({
@@ -60,7 +58,6 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect("/dashboard/invoices");
 }
 
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 export async function updateInvoice(id: string, formData: FormData) {
   const validatedFields = CreateInvoice.safeParse({
     customerId: formData.get("customerId"),
