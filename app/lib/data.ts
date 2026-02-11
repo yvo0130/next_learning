@@ -1,4 +1,3 @@
-import postgres from 'postgres';
 import {
   CustomerField,
   CustomersTableType,
@@ -8,8 +7,7 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+import { sql } from './db';
 
 export async function fetchRevenue() {
   try {
@@ -159,7 +157,6 @@ export async function fetchInvoiceById(id: string) {
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-    console.log(invoice);
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
